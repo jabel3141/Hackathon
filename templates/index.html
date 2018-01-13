@@ -61,14 +61,9 @@ var pocketXm = [];
 var pocketYm = [];
 var pocketNum = 0;
 
+var realX = 0;
+var realY = 0;
 
-var socket = new WebSocket('html://130.215.11.31:5000');
-socket.onopen= function() {
-    socket.send('thing');
-};
-socket.onmessage= function(s) {
-    console.log(s);
-};
 
 function record() {
   // ajax the JSON to the server
@@ -84,6 +79,16 @@ function record() {
 
 
 function setup(){
+  // socket = new WebSocket('ws://130.215.11.31:5555');
+  // socket.onopen= function() {
+  //     socket.send('hello');
+  // };
+  // socket.onmessage= function(s) {
+  //     console.log(s.data);
+  // };
+
+
+
   record();
 
   createCanvas(canvasX, canvasY);
@@ -106,7 +111,7 @@ function setup(){
 }
 
 function draw(){
-  //background(0);
+  background(0);
   drawTable();
   updateFrame();
   
@@ -136,8 +141,12 @@ function drawTable(){
 function updateFrame(){
   $.get("/getCoordinates", function(data) {
      console.log($.parseJSON(data))
+     realX = ($.parseJSON(data)[0]/.58) - cushionX/1.2
+     realY = $.parseJSON(data)[1]/.57
    });
-  //updatePos(x,y);
+
+
+  updatePos();
   //moveBall();
   fill('white');
   ellipse(ballPosX, ballPosY, ballSize);
@@ -148,9 +157,9 @@ function updateFrame(){
 
 }
 
-function updatePos(x, y){
-  ballPosX = x + pocketX;
-  ballPosY = y + pocketY;
+function updatePos(){
+  ballPosX = realX;
+  ballPosY = realY;
 }
 
 function updateTrail(){
