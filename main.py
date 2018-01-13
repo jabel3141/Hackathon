@@ -2,6 +2,26 @@
 from cueballfinder2 import CueBallFinder
 import cv2
 import numpy as np
+import sys
+from flask import Flask, render_template, request, redirect, Response
+import random, json
+
+app = Flask(__name__)
+
+coordinates = [400,500];
+
+@app.route("/")
+def output():
+    return render_template("index.html")
+
+@app.route("/getCoordinates")
+def send():
+    print(coordinates)
+    values = json.dumps(coordinates)
+    print(values)
+    return values
+
+@app.route('/receiver', methods = ['POST'])
 def main():
     # cue =  CueBallFinder();
     #
@@ -20,18 +40,39 @@ def main():
     cap = cv2.VideoCapture('testVid.avi')
     while(cap.isOpened()):
         ret, frame = cap.read()
-        # import pdb;pdb.set_trace()
-        output= pipeline.process(frame)
-        cv2.imshow('frame',frame)
-        print output
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
+        if(ret):
+            # import pdb;pdb.set_trace()
+            output= pipeline.process(frame)
+            cv2.imshow('frame',frame)
+            #print (output)
+            coordinates = output
+            #print(coordinates)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
 
     cap.release()
     cv2.destroyAllWindows()
 
 
+# def worker():
+#     # read json + reply
 
-if __name__=='__main__':
-    while True:
-        main()
+#     data = request.get_json()
+#     result = ''
+#     print(data)
+    
+
+#     for item in data:
+#         print(item)
+#         # loop over every row
+#         if(item == 'x'):
+#             result += 'x ' + str(data.get(item)) + '\n'
+#         else:
+#             result +=  'y ' + str(data.get(item))  + '\n'
+
+#     return result
+
+
+if __name__ == "__main__":
+    app.run(host="130.215.11.31", debug=True)
+
