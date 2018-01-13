@@ -143,8 +143,13 @@ function updateFrame(){
   // realY[0] = canvasY/2;
   $.get("/getCoordinates", function(data) {
      console.log($.parseJSON(data))
+<<<<<<< HEAD
      realX = ($.parseJSON(data)[0]/.58) - cushionX/1.2
      realY = $.parseJSON(data)[1]/.57
+=======
+     realX[0] = ($.parseJSON(data)[0]/.58) - cushionX/1.2
+     realY[0] = $.parseJSON(data)[1]/.57
+>>>>>>> b2f9fe7f115a26a3e53dfe6e9712b6437d927a39
    });
 
   for(var i = 0; i<1; i++){
