@@ -139,8 +139,8 @@ function drawTable(){
 }
 
 function updateFrame(){
-  realX[0] = canvasX/2;
-  realY[0] = canvasY/2;
+  // realX[0] = canvasX/2;
+  // realY[0] = canvasY/2;
   $.get("/getCoordinates", function(data) {
      console.log($.parseJSON(data))
      realX[0] = ($.parseJSON(data)[0]/.58) - cushionX/1.2
