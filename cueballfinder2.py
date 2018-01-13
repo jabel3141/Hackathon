@@ -1,39 +1,7 @@
 import cv2
-import numpy as np
+import numpy
 import math
 from enum import Enum
-from flask import Flask
-import imutils
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    cue =  CueBallFinder();
-    image = 'images/pool'
-    cue.process(image)
-
-    for contour in output:
-        (x,y,w,h) = cv2.boundingRect(contour)
-        cv2.rectangle(image, (x,y), (x+w,y+h), (255, 0, 0), 2)
-
-    cv2.imshow("image", image)
-    cv2.waitKey(0)
-    return "Hello World"
-
-
-if __name__ == '__main__':
-    #app.run(host='130.215.218.85', debug=True)
-    cue =  CueBallFinder();
-    image = 'images/pool'
-    cue = cue.process(image)
-
-    for contour in cue:
-        (x,y,w,h) = cv2.boundingRect(contour)
-        cv2.rectangle(image, (x,y), (x+w,y+h), (255, 0, 0), 2)
-
-    cv2.imshow("image", image)
-    cv2.waitKey(0)
-    #return "Hello World"
 
 class CueBallFinder:
     """
@@ -44,9 +12,9 @@ class CueBallFinder:
         """initializes all values to presets or None if need to be set
         """
 
-        self.__rgb_threshold_red = [0.0, 255.0]
-        self.__rgb_threshold_green = [208.67805755395685, 255.0]
-        self.__rgb_threshold_blue = [0.0, 255.0]
+        self.__rgb_threshold_red = [82.55395683453237, 255.0]
+        self.__rgb_threshold_green = [176.57374100719426, 255.0]
+        self.__rgb_threshold_blue = [0.0, 183.5653650254669]
 
         self.rgb_threshold_output = None
 
@@ -62,7 +30,7 @@ class CueBallFinder:
         self.__filter_contours_max_width = 1000
         self.__filter_contours_min_height = 0
         self.__filter_contours_max_height = 1000
-        self.__filter_contours_solidity = [0, 100]
+        self.__filter_contours_solidity = [60.25179856115107, 100.0]
         self.__filter_contours_max_vertices = 1000000
         self.__filter_contours_min_vertices = 0
         self.__filter_contours_min_ratio = 0
@@ -82,10 +50,11 @@ class CueBallFinder:
         # Step Find_Contours0:
         self.__find_contours_input = self.rgb_threshold_output
         (self.find_contours_output) = self.__find_contours(self.__find_contours_input, self.__find_contours_external_only)
-        #
+
         # Step Filter_Contours0:
         self.__filter_contours_contours = self.find_contours_output
-        (self.filter_contours_output) = self.__filter_contours(source0, self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
+        # (self.filter_contours_output) = self.__filter_contours(source0,self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
+        return self.__filter_contours(source0,self.__filter_contours_contours, self.__filter_contours_min_area, self.__filter_contours_min_perimeter, self.__filter_contours_min_width, self.__filter_contours_max_width, self.__filter_contours_min_height, self.__filter_contours_max_height, self.__filter_contours_solidity, self.__filter_contours_max_vertices, self.__filter_contours_min_vertices, self.__filter_contours_min_ratio, self.__filter_contours_max_ratio)
 
 
     @staticmethod
@@ -100,10 +69,8 @@ class CueBallFinder:
             A black and white numpy.ndarray.
         """
         out = cv2.cvtColor(input, cv2.COLOR_BGR2RGB)
+        return cv2.inRange(out, (red[0], green[0], blue[0]),  (red[1], green[1], blue[1]))
 
-        filtered= cv2.inRange(out, (red[0], green[0], blue[0]),  (red[1], green[1], blue[1]))
-
-        return filtered
     @staticmethod
     def __find_contours(input, external_only):
         """Sets the values of pixels in a binary image to their distance to the nearest black pixel.
@@ -122,7 +89,7 @@ class CueBallFinder:
         return contours
 
     @staticmethod
-    def __filter_contours(source0, input_contours, min_area, min_perimeter, min_width, max_width,
+    def __filter_contours(source0,input_contours, min_area, min_perimeter, min_width, max_width,
                         min_height, max_height, solidity, max_vertex_count, min_vertex_count,
                         min_ratio, max_ratio):
         """Filters out contours that do not meet certain criteria.
@@ -143,7 +110,9 @@ class CueBallFinder:
             Contours as a list of numpy.ndarray.
         """
         output = []
-        # print input_contours
+        center= []
+        x =0
+        y=0
         for contour in input_contours:
             x,y,w,h = cv2.boundingRect(contour)
             if (w < min_width or w > max_width):
@@ -165,17 +134,16 @@ class CueBallFinder:
             if (ratio < min_ratio or ratio > max_ratio):
                 continue
             output.append(contour)
-            # compute the center of the contour
 
             M = cv2.moments(contour)
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
 
-        	# draw the contour and center of the shape on the
             cv2.drawContours(source0, contour, -1, (0, 255, 0), 2)
             cv2.circle(source0, (cX, cY), 3, (255, 0, 255), -1)
             cv2.putText(source0, "x ="+str(cX)+", y ="+str(cY), (cX - 20, cY - 20),
-        		cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
-            # cv2.drawContours(source0, output, 0, (0,255,0), 3)
-
-        return output
+            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+            x=cX
+            y=cY
+        center = [x,y]
+        return center
