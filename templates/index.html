@@ -62,7 +62,13 @@ var pocketYm = [];
 var pocketNum = 0;
 
 
-
+var socket = new WebSocket('html://130.215.11.31:5000');
+socket.onopen= function() {
+    socket.send('thing');
+};
+socket.onmessage= function(s) {
+    console.log(s);
+};
 
 function record() {
   // ajax the JSON to the server
