@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cue Ball Tracker</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!--   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript"></script> -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/addons/p5.dom.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/addons/p5.sound.js"></script>
+  
+  <style>
+
+  </style>
+
+</head>
+<body>
+
+</body>
+
+
+<!-- This will send data using AJAX to Python:<br /><br />
+<a href="" id="theButton">Click Me</a> -->
+
+<script>
+var canvasX = window.innerWidth;
+var canvasY = window.innerHeight;
+
+var pockets = [];
+var balls = [];
+
+var tableX = 2 * canvasX/3;
+var tableY = tableX/2;
+
+var pocketX = -canvasX/2 + tableX;
+var pocketY = tableY - canvasY/2;
+var pocketSize = tableX * .05;
+
+var tablePosX = -canvasX/2 + tableX;
+var tablePosY = tableY - canvasY/2;
+
+var cushionX = tableX - 2 * pocketSize/3;
+var cushionY = tableY - 2 * pocketSize/3;
+var cushionPosX = tablePosX + pocketSize/3;
+var cushionPosY = tablePosY + pocketSize/3;
+
+var borderExt = tableX / 80;
+
+var ballSize = pocketSize/2;
+var ballPosX = cushionPosX + cushionX/4;
+var ballPosY = cushionPosY + cushionY/2;
+
+var trailX = [];
+var trailY = [];
+var trailSize = 2;
+var trailLen = 30;
+var k = 0;
+
+var realX = [];
+var realY = [];
+
+
+function record() {
+  // ajax the JSON to the server
+  $.ajax({
+    url: "/receiver",  
+    method: "POST",
+    success: function(response){
+
+  }});
+  // stop link reloading the page
+ event.preventDefault();
+}
+
+
+function setup(){
+  // socket = new WebSocket('ws://130.215.11.31:5555');
+  // socket.onopen= function() {
+  //     socket.send('hello');
+  // };
+  // socket.onmessage= function(s) {
+  //     console.log(s.data);
+  // };
+
+
+
+  record();
+
+  createCanvas(canvasX, canvasY);
+  background(0);
+  //drawTable();
+
+  for(var i = 0; i<trailLen; i++){
+    trailX[i] = ballPosX;
+    trailY[i] = ballPosY;
+  }
+
+  let num = 0;
+  for(var i = 0; i<3; i++){
+    for(var j = 0; j<2; j++){
+      pockets[num] = new Pocket(pocketX + i * tableX/2, pocketY + j * tableY);
+      num++;
+    }
+    
+  }
+
+  for(var i = 0; i<1; i++){
+      balls[i] = new Ball(0, 0, trailLen);
+  }
+}
+
+function draw(){
+  background(0);
+  drawTable();
+  updateFrame();
+  
+}
+
+function drawTable(){
+
+  strokeWeight(4);
+  stroke('white');
+
+  fill(10,10,10);
+  rect(tablePosX - pocketSize/2 - borderExt, tablePosY - pocketSize/2 - borderExt, tableX + pocketSize + borderExt*2, tableY + pocketSize + borderExt*2, pocketSize/2);
+  fill(10,110,10);
+  rect(tablePosX, tablePosY, tableX, tableY);
+  fill(10,110,10);
+  rect(cushionPosX, cushionPosY, cushionX, cushionY);
+
+  let num = 0;
+  for(var i = 0; i<3; i++){
+    for(var j = 0; j<2; j++){
+      pockets[num].drawPocket();
+      num++;
+    }
+  }
+}
+
+function updateFrame(){
+  // realX[0] = canvasX/2;
+  // realY[0] = canvasY/2;
+  $.get("/getCoordinates", function(data) {
+     console.log($.parseJSON(data))
+     realX = ($.parseJSON(data)[0]/.58) - cushionX/1.2
+     realY = $.parseJSON(data)[1]/.57
+   });
+
+  for(var i = 0; i<1; i++){
+    balls[i].updatePos(realX[0], realY[0]);
+    balls[i].drawBall();
+    //balls[i].drawTrail();
+  }
+}
+
+function restart(){
+
+}
+
+class Ball{
+  constructor(x, y, trailLen){
+    this.size = ballSize;
+    this.xPos = x;
+    this.yPos = y;
+    this.trailLen = trailLen;
+    this.trailX = [];
+    this.trailY = [];
+    this.k = 0;
+  }
+
+  drawBall(){
+    noStroke();
+    fill('white');
+    ellipse(this.xPos, this.yPos, this.size);
+  }
+
+  updatePos(newX, newY){
+    this.xPos = newX;
+    this.yPos = newY;
+  }
+
+  drawTrail(){
+    if(this.k >= this.trailLen){
+      this.k = 0;
+    }
+    this.trailX[this.k] = this.xPos;
+    this.trailY[this.k] = this.yPos;
+    this.k += 1;
+
+    for(var i = 0; i<this.trailLen; i++){
+      ellipse(this.trailX[i], this.trailY[i], trailSize);
+    }
+  }
+}
+
+class Pocket{
+  constructor(x, y){
+    this.xPos = x;
+    this.yPos = y;
+    this.size = pocketSize;
+  }
+
+  drawPocket(){
+    fill(30,30,10);
+    ellipse(this.xPos, this.yPos, this.size);
+  }
+}
+
+</script>
+
+
+</html>
+
