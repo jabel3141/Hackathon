@@ -2,6 +2,7 @@
 from cueballfinder2 import CueBallFinder
 from yellowballfinder import YellowFinder
 from redballfinder import RedFinder
+from darkredballfinder import DarkRedFinder
 from distance import CornerDistance
 import cv2
 import numpy as np
@@ -25,8 +26,9 @@ def send():
     global cueCoords
     global yellowCoords
     global redCoords
+    global brownCoords
 
-    coordinates = [cueCoords, yellowCoords, redCoords]
+    coordinates = [cueCoords, yellowCoords, redCoords, brownCoords]
     print(coordinates)
     values = json.dumps(coordinates)
     print(values)
@@ -38,11 +40,13 @@ def main():
     global cueCoords
     global redCoords
     global yellowCoords
+    global brownCoords
 
     pipeline = CueBallFinder()
 
     yellowBall = YellowFinder()
     redBall = RedFinder()
+    brownBall = DarkRedFinder()
     cornerDistance = CornerDistance()
     cap = cv2.VideoCapture(1)
     leftCorner =[]
@@ -68,6 +72,7 @@ def main():
             output= pipeline.process(frame)
             oneBall = yellowBall.process(frame)
             threeBall = redBall.process(frame)
+            sevenBall = brownBall.process(frame)
             cv2.imshow('frame',frame)
             #print (output)
 
@@ -77,7 +82,9 @@ def main():
                 yellowCoords = [oneBall[0]-leftCorner[0],oneBall[1]-leftCorner[1]]
             if(len(threeBall) != 0):
                 redCoords = [threeBall[0]-leftCorner[0],threeBall[1]-leftCorner[1]]
-            
+            if(len(sevenBall) != 0):
+                brownCoords = [sevenBall[0]-leftCorner[0],sevenBall[1]-leftCorner[1]]
+
             #print (cueCoords)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
