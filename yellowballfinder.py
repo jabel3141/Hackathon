@@ -30,7 +30,7 @@ class YellowFinder:
         self.__filter_contours_max_width = 1000
         self.__filter_contours_min_height = 0
         self.__filter_contours_max_height = 1000
-        self.__filter_contours_solidity = [76, 100.0]
+        self.__filter_contours_solidity = [85, 100.0]
         self.__filter_contours_max_vertices = 1000000
         self.__filter_contours_min_vertices = 0
         self.__filter_contours_min_ratio = 0
@@ -145,5 +145,5 @@ class YellowFinder:
             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             x=cX
             y=cY
-        center = [x,y]
+            center = [x,y]
         return center

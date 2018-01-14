@@ -145,5 +145,5 @@ class RedFinder:
             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             x=cX
             y=cY
-        center = [x,y]
+            center = [x,y]
         return center
