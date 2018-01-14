@@ -3,6 +3,8 @@ from yellowballfinder import YellowFinder
 from redballfinder import RedFinder
 from darkredballfinder import DarkRedFinder
 from blueballfinder import BlueFinder
+from greenballfinder import GreenFinder
+from purpleballfinder import PurpleFinder
 from distance import CornerDistance
 import cv2
 import numpy as np
@@ -27,6 +29,8 @@ def main():
     redBall = RedFinder()
     darkredBall = DarkRedFinder()
     blueBall = BlueFinder()
+    greenBall = GreenFinder()
+    purpleBall = PurpleFinder()
     cornerDistance = CornerDistance()
     cap = cv2.VideoCapture(0)
     leftCorner =[]
@@ -49,11 +53,13 @@ def main():
         ret, frame = cap.read()
         if(ret):
             # import pdb;pdb.set_trace()
-            # output= pipeline.process(frame)
-            # oneBall = yellowBall.process(frame)
+            output= pipeline.process(frame)
+            oneBall = yellowBall.process(frame)
             threeBall = redBall.process(frame)
             darkred = darkredBall.process(frame)
-            # blueball = blueBall.process(frame)
+            blueball = blueBall.process(frame)
+            greenball = greenBall.process(frame)
+            purpleball = purpleBall.process(frame)
             cv2.imshow('frame',frame)
             #print (output)
             #print(oneBall)
