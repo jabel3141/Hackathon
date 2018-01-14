@@ -10,7 +10,9 @@ import socket
 
 app = Flask(__name__)
 
-coordinates = []
+cueCoords = []
+redCoords = []
+yellowCoords=[]
 
 @app.route("/")
 def output():
@@ -18,7 +20,11 @@ def output():
 
 @app.route("/getCoordinates")
 def send():
-    global coordinates
+    global cueCoords
+    global yellowCoords
+    global redCoords
+
+    coordinates = [cueCoords, yellowCoords, redCoords]
     print(coordinates)
     values = json.dumps(coordinates)
     print(values)
@@ -27,43 +33,44 @@ def send():
 
 @app.route('/receiver', methods = ['POST'])
 def main():
-    # cue =  CueBallFinder();
-    #
-    #
-    # output = cue.process(img)
-    # # for contour in output:
-    # #     (x,y,w,h) = cv2.boundingRect(contour)
-    # #     cv2.rectangle(img, (x,y), (x+w,y+h), (255, 0, 0), 2)
-    #
-    # cv2.imshow("image", img)
-    # cv2.waitKey(0)
-
-    global coordinates
+    global cueCoords
+    global redCoords
+    global yellowCoords
 
     pipeline = CueBallFinder()
-    cornerDistance = cornerDistance()
-    cap = cv2.VideoCapture('testVid.avi')
+    yellowBall = YellowFinder()
+    redBall = RedFinder()
+    cornerDistance = CornerDistance()
+    cap = cv2.VideoCapture(0)
+    leftCorner =[]
+
     while cap.isOpened():
         ret, frame = cap.read()
         if ret:
             corners = cornerDistance.process(frame)
+            print corners
+            # cv2.imshow('frame', frame)
             cornerDist = math.sqrt(math.pow(corners[0][0]+ corners[1][0], 2)+math.pow(corners[0][1]+corners[1][1],2))
-            if corner[0][0]<corner[1][0]:
-                leftCorner = corner[0]
-            elif:
-                leftCorner = corner[1]
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            if corners[0][0]<corners[1][0]:
+                leftCorner = corners[0]
+            else:
+                leftCorner = corners[1]
+
+            break
 
     while(cap.isOpened()):
         ret, frame = cap.read()
         if(ret):
             # import pdb;pdb.set_trace()
             output= pipeline.process(frame)
+            oneBall = yellowBall.process(frame)
+            threeBall = redBall.process(frame)
             cv2.imshow('frame',frame)
             #print (output)
-            coordinates = output
-            print(coordinates)
+            cueCoords = [output[0]-leftCorner[0],output[1]-leftCorner[1]]
+            yellowCoords = [oneBall[0]-leftCorner[0],oneBall[1]-leftCorner[1]]
+            redCoords = [threeBall[0]-leftCorner[0],threeBall[1]-leftCorner[1]]
+            # print (coordinates)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 

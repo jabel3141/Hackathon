@@ -12,8 +12,8 @@ class RedFinder:
         """initializes all values to presets or None if need to be set
         """
 
-        self.__rgb_threshold_red = [138, 255.0]
-        self.__rgb_threshold_green = [0, 151]
+        self.__rgb_threshold_red = [195, 255.0]
+        self.__rgb_threshold_green = [0, 140]
         self.__rgb_threshold_blue = [0, 255]
 
         self.rgb_threshold_output = None
@@ -24,13 +24,13 @@ class RedFinder:
         self.find_contours_output = None
 
         self.__filter_contours_contours = self.find_contours_output
-        self.__filter_contours_min_area = 90
+        self.__filter_contours_min_area = 25
         self.__filter_contours_min_perimeter = 0
-        self.__filter_contours_min_width = 25
-        self.__filter_contours_max_width = 60
+        self.__filter_contours_min_width = 0
+        self.__filter_contours_max_width = 1000
         self.__filter_contours_min_height = 0
-        self.__filter_contours_max_height = 60
-        self.__filter_contours_solidity = [38, 100.0]
+        self.__filter_contours_max_height = 1000
+        self.__filter_contours_solidity = [63, 100.0]
         self.__filter_contours_max_vertices = 1000000
         self.__filter_contours_min_vertices = 0
         self.__filter_contours_min_ratio = 0

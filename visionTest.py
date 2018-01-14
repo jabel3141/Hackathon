@@ -24,7 +24,7 @@ def main():
     yellowBall = YellowFinder()
     redBall = RedFinder()
     cornerDistance = CornerDistance()
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(0)
     leftCorner =[]
 
     while cap.isOpened():

@@ -12,9 +12,9 @@ class YellowFinder:
         """initializes all values to presets or None if need to be set
         """
 
-        self.__rgb_threshold_red = [0, 255.0]
-        self.__rgb_threshold_green = [112, 255.0]
-        self.__rgb_threshold_blue = [0, 32]
+        self.__rgb_threshold_red = [167, 255.0]
+        self.__rgb_threshold_green = [96, 255.0]
+        self.__rgb_threshold_blue = [0, 140]
 
         self.rgb_threshold_output = None
 
@@ -26,11 +26,11 @@ class YellowFinder:
         self.__filter_contours_contours = self.find_contours_output
         self.__filter_contours_min_area = 25
         self.__filter_contours_min_perimeter = 0
-        self.__filter_contours_min_width = 27
-        self.__filter_contours_max_width = 60
+        self.__filter_contours_min_width = 0
+        self.__filter_contours_max_width = 1000
         self.__filter_contours_min_height = 0
-        self.__filter_contours_max_height = 60
-        self.__filter_contours_solidity = [0, 100.0]
+        self.__filter_contours_max_height = 1000
+        self.__filter_contours_solidity = [76, 100.0]
         self.__filter_contours_max_vertices = 1000000
         self.__filter_contours_min_vertices = 0
         self.__filter_contours_min_ratio = 0
