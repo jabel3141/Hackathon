@@ -134,7 +134,7 @@ function setup(){
 
   }
 
-  for(var i = 0; i<3; i++){
+  for(var i = 0; i<6; i++){
     var color
     if(i == 0){
       color = "white"
@@ -145,7 +145,16 @@ function setup(){
     else if(i == 2){
       color = "red"
     }
-    
+    else if(i == 3){
+      color = "red"
+    }
+    else if(i == 4){
+      color = "red"
+    }
+    else if(i == 5){
+      color = "red"
+    }
+
     balls[i] = new Ball(0, 0, 100, color);
   }
 }
@@ -236,9 +245,13 @@ class Ball{
     this.k += 1;
 
     for(var i = 0; i<this.trailLen; i++){
-      ellipse(this.trailX[i], this.trailY[i], trailSize);
+      strokeWeight(trailSize);
+      stroke('black')
+      point(this.trailX[i], this.trailY[i]);
+      //ellipse(this.trailX[i], this.trailY[i], trailSize);
     }
   }
+
 }
 
 class Pocket{
@@ -251,6 +264,7 @@ class Pocket{
   drawPocket(){
     fill(30,30,10);
     ellipse(this.xPos, this.yPos, this.size);
+
   }
 }
 
