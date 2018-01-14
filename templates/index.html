@@ -9,7 +9,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/p5.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/addons/p5.dom.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.16/addons/p5.sound.js"></script>
-  
+
   <style>
 
   </style>
@@ -64,7 +64,7 @@ var realY = [];
 function record() {
   // ajax the JSON to the server
   $.ajax({
-    url: "/receiver",  
+    url: "/receiver",
     method: "POST",
     success: function(response){
 
@@ -102,7 +102,7 @@ function setup(){
       pockets[num] = new Pocket(pocketX + i * tableX/2, pocketY + j * tableY);
       num++;
     }
-    
+
   }
 
   for(var i = 0; i<1; i++){
@@ -114,7 +114,7 @@ function draw(){
   background(0);
   drawTable();
   updateFrame();
-  
+
 }
 
 function drawTable(){
@@ -145,6 +145,7 @@ function updateFrame(){
      console.log($.parseJSON(data))
      realX[0] = ($.parseJSON(data)[0]/.58) - cushionX/1.2
      realY[0] = $.parseJSON(data)[1]/.57
+
    });
 
   for(var i = 0; i<1; i++){
@@ -211,4 +212,3 @@ class Pocket{
 
 
 </html>
-
