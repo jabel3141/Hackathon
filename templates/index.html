@@ -27,18 +27,22 @@
 var canvasX = window.innerWidth;
 var canvasY = window.innerHeight;
 
+var offsetX = 0;
+var offsetY = 0;
+var scaled = 1;
+
 var pockets = [];
 var balls = [];
 
-var tableX = 2 * canvasX/3;
-var tableY = tableX/2;
+var tableX = 2 * (canvasX/3);
+var tableY = (tableX/1.85);
 
 var pocketX = -canvasX/2 + tableX;
-var pocketY = tableY - canvasY/2;
+var pocketY = tableY - canvasY/2-100;
 var pocketSize = tableX * .05;
 
 var tablePosX = -canvasX/2 + tableX;
-var tablePosY = tableY - canvasY/2;
+var tablePosY = tableY - canvasY/2 - 100;
 
 var cushionX = tableX - 2 * pocketSize/3;
 var cushionY = tableY - 2 * pocketSize/3;
@@ -47,18 +51,52 @@ var cushionPosY = tablePosY + pocketSize/3;
 
 var borderExt = tableX / 80;
 
-var ballSize = pocketSize/2;
+var ballSize = pocketSize/1.25;
 var ballPosX = cushionPosX + cushionX/4;
 var ballPosY = cushionPosY + cushionY/2;
 
 var trailX = [];
 var trailY = [];
-var trailSize = 2;
+var trailSize = 10;
 var trailLen = 30;
 var k = 0;
 
 var realX = [];
 var realY = [];
+
+
+
+function keyTyped(){
+  if(key === 'k'){
+    offsetY += 5;
+  }
+  else if(key === 'i'){
+    offsetY -= 5;
+  }
+  else if(key === 'l'){
+    offsetX += 5;
+  }
+  else if(key === 'j'){
+    offsetX -= 5;
+  }
+  else if(key === 'o'){
+    scaled += .01;
+  }
+  else if(key === 'u'){
+    if(scaled <=.5){
+      scaled = .5
+    }
+    else{
+      scaled -= .01;
+    }
+  }
+  else if(key === 'm'){
+    ballSize += 5;
+  }
+  else if(key === 'n'){
+    ballSize -= 5;
+  }
+}
 
 
 function record() {
@@ -97,7 +135,18 @@ function setup(){
   }
 
   for(var i = 0; i<3; i++){
-      balls[i] = new Ball(0, 0, 0);
+    var color
+    if(i == 0){
+      color = "white"
+    }
+    else if(i == 1){
+      color = "yellow"
+    }
+    else if(i == 2){
+      color = "red"
+    }
+    
+    balls[i] = new Ball(0, 0, 100, color);
   }
 }
 
@@ -111,13 +160,13 @@ function draw(){
 function drawTable(){
 
   strokeWeight(4);
-  stroke('white');
+  stroke('black');
 
   fill(10,10,10);
   rect(tablePosX - pocketSize/2 - borderExt, tablePosY - pocketSize/2 - borderExt, tableX + pocketSize + borderExt*2, tableY + pocketSize + borderExt*2, pocketSize/2);
-  fill(10,110,10);
+  fill('white');
   rect(tablePosX, tablePosY, tableX, tableY);
-  fill(10,110,10);
+  fill('white');
   rect(cushionPosX, cushionPosY, cushionX, cushionY);
 
   let num = 0;
@@ -130,24 +179,23 @@ function drawTable(){
 }
 
 function updateFrame(){
-  // realX[0] = canvasX/2;
-  // realY[0] = canvasY/2;
+
   $.get("/getCoordinates", function(data) {
      console.log($.parseJSON(data))
 
-     // for(var i = 0; i < balls.length; i++){
-     //  realX[i] = ($.parseJSON(data)[i][0]/.58) - cushionX/1.2
-     //  realY[i] = $.parseJSON(data)[i][1]/.57
-     // }
-     
+     for(var i = 0; i < balls.length; i++){
+      realX[i] = (($.parseJSON(data)[i][0]*2)+cushionPosX)
+      realY[i] = (($.parseJSON(data)[i][1]*2)+cushionPosY)
+     }
 
    });
 
-  // for(var i = 0; i<balls.length; i++){
-  //   balls[i].updatePos(realX[i], realY[i]);
-  //   balls[i].drawBall();
-  //   //balls[i].drawTrail();
-  // }
+  for(var i = 0; i<balls.length; i++){
+    print("hello")
+    balls[i].updatePos(realX[i], realY[i]);
+    balls[i].drawBall();
+    balls[i].drawTrail();
+  }
 }
 
 function restart(){
@@ -155,7 +203,7 @@ function restart(){
 }
 
 class Ball{
-  constructor(x, y, trailLen){
+  constructor(x, y, trailLen, color){
     this.size = ballSize;
     this.xPos = x;
     this.yPos = y;
@@ -163,20 +211,23 @@ class Ball{
     this.trailX = [];
     this.trailY = [];
     this.k = 0;
+    this.color = color;
   }
 
   drawBall(){
-    noStroke();
-    fill('white');
-    ellipse(this.xPos, this.yPos, this.size);
+    strokeWeight(5);
+    stroke("black")
+    fill(this.color);
+    ellipse(this.xPos, this.yPos, ballSize);
   }
 
   updatePos(newX, newY){
-    this.xPos = newX;
-    this.yPos = newY;
+    this.xPos = (newX + offsetX) * scaled;
+    this.yPos = (newY + offsetY) * scaled;
   }
 
   drawTrail(){
+    //noStroke()
     if(this.k >= this.trailLen){
       this.k = 0;
     }

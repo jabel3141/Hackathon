@@ -1,18 +1,20 @@
 #from cueballfinder import CueBallFinder
 from cueballfinder2 import CueBallFinder
+from yellowballfinder import YellowFinder
+from redballfinder import RedFinder
 from distance import CornerDistance
 import cv2
 import numpy as np
 import sys
 from flask import Flask, render_template, request, redirect, Response
-import random, json
+import random, json, math
 import socket
 
 app = Flask(__name__)
 
 cueCoords = []
 redCoords = []
-yellowCoords=[]
+yellowCoords = []
 
 @app.route("/")
 def output():
@@ -49,7 +51,7 @@ def main():
         ret, frame = cap.read()
         if(ret):
             corners = cornerDistance.process(frame)
-            print(corners)
+            #print(corners)
             # cv2.imshow('frame', frame)
             cornerDist = math.sqrt(math.pow(corners[0][0]+ corners[1][0], 2)+math.pow(corners[0][1]+corners[1][1],2))
             if corners[0][0]<corners[1][0]:
@@ -69,10 +71,14 @@ def main():
             cv2.imshow('frame',frame)
             #print (output)
 
-            cueCoords = [output[0]-leftCorner[0],output[1]-leftCorner[1]]
-            yellowCoords = [oneBall[0]-leftCorner[0],oneBall[1]-leftCorner[1]]
-            redCoords = [threeBall[0]-leftCorner[0],threeBall[1]-leftCorner[1]]
-            # print (coordinates)
+            if(len(output) != 0):
+                cueCoords = [output[0]-leftCorner[0],output[1]-leftCorner[1]]
+            if(len(oneBall) != 0):
+                yellowCoords = [oneBall[0]-leftCorner[0],oneBall[1]-leftCorner[1]]
+            if(len(threeBall) != 0):
+                redCoords = [threeBall[0]-leftCorner[0],threeBall[1]-leftCorner[1]]
+            
+            #print (cueCoords)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 

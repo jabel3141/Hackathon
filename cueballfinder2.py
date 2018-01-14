@@ -288,11 +288,19 @@ class CueBallFinder:
             cX = int(M["m10"] / M["m00"])
             cY = int(M["m01"] / M["m00"])
 
+            #print(cX)
+
             cv2.drawContours(source0, contour, -1, (0, 255, 0), 2)
             cv2.circle(source0, (cX, cY), 3, (255, 0, 255), -1)
             cv2.putText(source0, "Cue Ball x ="+str(cX)+", y ="+str(cY), (cX - 20, cY - 20),
             cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
             x=cX
             y=cY
-        center = [x,y]
+            # print(x)
+            # print(y)
+        #print(x)
+        #print(y)
+            center = [x,y]
+        
+        # print(center)
         return center

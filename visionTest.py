@@ -24,14 +24,14 @@ def main():
     yellowBall = YellowFinder()
     redBall = RedFinder()
     cornerDistance = CornerDistance()
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     leftCorner =[]
 
     while cap.isOpened():
         ret, frame = cap.read()
         if ret:
             corners = cornerDistance.process(frame)
-            print corners
+            #print(corners)
             # cv2.imshow('frame', frame)
             cornerDist = math.sqrt(math.pow(corners[0][0]+ corners[1][0], 2)+math.pow(corners[0][1]+corners[1][1],2))
             if corners[0][0]<corners[1][0]:
@@ -50,8 +50,11 @@ def main():
             threeBall = redBall.process(frame)
             cv2.imshow('frame',frame)
             #print (output)
-            coordinates = [output[0]-leftCorner[0],output[1]-leftCorner[1]]
-            print (coordinates)
+            #print(oneBall)
+            #print(threeBall)
+            if(len(output) != 0):
+                coordinates = [output[0]-leftCorner[0],output[1]-leftCorner[1]]
+            #print (coordinates)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
