@@ -3,6 +3,9 @@ from cueballfinder2 import CueBallFinder
 from yellowballfinder import YellowFinder
 from redballfinder import RedFinder
 from darkredballfinder import DarkRedFinder
+from blueballfinder import BlueFinder
+from greenballfinder import GreenFinder
+from purpleballfinder import PurpleFinder
 from distance import CornerDistance
 import cv2
 import numpy as np
@@ -27,7 +30,10 @@ def send():
     global yellowCoords
     global redCoords
     global brownCoords
-
+    global blueCoords
+    global greenCoords
+    global purpleCoords
+    #cue, yellow, red, brown, blue, green, purple
     coordinates = [cueCoords, yellowCoords, redCoords, brownCoords]
     print(coordinates)
     values = json.dumps(coordinates)
@@ -38,15 +44,21 @@ def send():
 @app.route('/receiver', methods = ['POST'])
 def main():
     global cueCoords
-    global redCoords
     global yellowCoords
+    global redCoords
     global brownCoords
+    global blueCoords
+    global greenCoords
+    global purpleCoords
 
     pipeline = CueBallFinder()
 
     yellowBall = YellowFinder()
     redBall = RedFinder()
     brownBall = DarkRedFinder()
+    blueBall = BlueFinder()
+    greenBall = GreenFinder()
+    purpleBall = PurpleFinder()
     cornerDistance = CornerDistance()
     cap = cv2.VideoCapture(1)
     leftCorner =[]
@@ -73,6 +85,9 @@ def main():
             oneBall = yellowBall.process(frame)
             threeBall = redBall.process(frame)
             sevenBall = brownBall.process(frame)
+            twoBall = blueBall.process(frame)
+            sixBall = greenBall.process(frame)
+            fourBall = purpleBall.process(frame)
             cv2.imshow('frame',frame)
             #print (output)
 
@@ -84,6 +99,12 @@ def main():
                 redCoords = [threeBall[0]-leftCorner[0],threeBall[1]-leftCorner[1]]
             if(len(sevenBall) != 0):
                 brownCoords = [sevenBall[0]-leftCorner[0],sevenBall[1]-leftCorner[1]]
+            if(len(twoBall) != 0):
+                brownCoords = [twoBall[0]-leftCorner[0],twoBall[1]-leftCorner[1]]
+            if(len(sixBall) != 0):
+                brownCoords = [sixBall[0]-leftCorner[0],sixBall[1]-leftCorner[1]]
+            if(len(fourBall) != 0):
+                brownCoords = [fourBall[0]-leftCorner[0],fourBall[1]-leftCorner[1]]
 
             #print (cueCoords)
             if cv2.waitKey(1) & 0xFF == ord('q'):
