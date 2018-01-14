@@ -2,10 +2,12 @@
 
 https://github.com/jabel3141/Hackathon
 
+https://www.youtube.com/watch?v=TJchry_SY3Q
+
 Jason Abel
 Nikhil Castelino
-JamesCorse
-Rayyan Khan
+James Corse
+Rayyan Khan 
 Thomas Hagen
 
 
@@ -16,61 +18,60 @@ in order for it to track 7 billiard balls at the same time and create an image f
 and OpenCV was used for ball tracking
 
 
-##Equipment:
+## Equipment:
 - Camera
 - Projector
 - Mini Billiards set (includes table, balls, cue sticks, etc.)
 
 
-##index.html
+## index.html
 - Contains the html code for the webpage
 - Uses p5 librabires to create the billiard table and balls
 
-##blueballfinder.py
+## blueballfinder.py
 - Used to track the blue ball on the billiard table
 - Tracks balls using OpenCV
 - Returns the x and y coordinates of the ball
 
-##cueballfinder2.py
+## cueballfinder2.py
 - Used to track the cue ball on the billiard table
 - Tracks balls using OpenCV
 - Returns the x and y coordinates of the ball
 
-##darkredballfinder.py
+## darkredballfinder.py
 - Used to track the brown ball on the billiard table
 - Tracks balls using OpenCV
 - Returns the x and y coordinates of the ball
 
-##distance.py
+## distance.py
 - Used to measure the table length
 - Measured using OpenCV
 - Returns the x and y coordinates of two corners
 
-##greenballfinder.py
+## greenballfinder.py
 - Used to track the green ball on the billiard table
 - Tracks balls using OpenCV
 - Returns the x and y coordinates of the ball
 
-##main.py
+## main.py
 - Runs the server on flask
 - Contains all the POST and GET requests made by index.html
 - Communicates with all the ballfinder.py files
 
-##purpleballfinder.py
+## purpleballfinder.py
 - Used to track the purple ball on the billiard table
 - Tracks balls using OpenCV
 - Returns the x and y coordinates of the ball
 
-##redballfinder.py
+## redballfinder.py
 - Used to track the red ball on the billiard table
 - Tracks balls using OpenCV
 - Returns the x and y coordinates of the ball
 
-##visionTest.py
+## visionTest.py
 - Used to test the ballfinder.py files
 
-##yellowballfinder.py
+## yellowballfinder.py
 - Used to track the yellow ball on the billiard table
 - Tracks balls using OpenCV
 - Returns the x and y coordinates of the ball
-
