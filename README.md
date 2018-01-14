@@ -7,11 +7,11 @@ https://github.com/jabel3141/Hackathon
 https://www.youtube.com/watch?v=TJchry_SY3Q
 
 ## Team Members
-Jason Abel
-Nikhil Castelino
-James Corse
-Rayyan Khan 
-Thomas Hagen
+- Jason Abel
+- Nikhil Castelino
+- James Corse
+- Thomas Hagen
+- Rayyan Khan 
 
 ## Project Description
 This project tracks billiard balls on a table using a camera. We then take this information and create
