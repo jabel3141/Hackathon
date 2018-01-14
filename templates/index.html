@@ -75,15 +75,6 @@ function record() {
 
 
 function setup(){
-  // socket = new WebSocket('ws://130.215.11.31:5555');
-  // socket.onopen= function() {
-  //     socket.send('hello');
-  // };
-  // socket.onmessage= function(s) {
-  //     console.log(s.data);
-  // };
-
-
 
   record();
 
@@ -105,8 +96,8 @@ function setup(){
 
   }
 
-  for(var i = 0; i<1; i++){
-      balls[i] = new Ball(0, 0, trailLen);
+  for(var i = 0; i<3; i++){
+      balls[i] = new Ball(0, 0, 0);
   }
 }
 
@@ -143,16 +134,20 @@ function updateFrame(){
   // realY[0] = canvasY/2;
   $.get("/getCoordinates", function(data) {
      console.log($.parseJSON(data))
-     realX[0] = ($.parseJSON(data)[0]/.58) - cushionX/1.2
-     realY[0] = $.parseJSON(data)[1]/.57
+
+     // for(var i = 0; i < balls.length; i++){
+     //  realX[i] = ($.parseJSON(data)[i][0]/.58) - cushionX/1.2
+     //  realY[i] = $.parseJSON(data)[i][1]/.57
+     // }
+     
 
    });
 
-  for(var i = 0; i<1; i++){
-    balls[i].updatePos(realX[0], realY[0]);
-    balls[i].drawBall();
-    //balls[i].drawTrail();
-  }
+  // for(var i = 0; i<balls.length; i++){
+  //   balls[i].updatePos(realX[i], realY[i]);
+  //   balls[i].drawBall();
+  //   //balls[i].drawTrail();
+  // }
 }
 
 function restart(){

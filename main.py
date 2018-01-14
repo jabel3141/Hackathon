@@ -38,42 +38,26 @@ def main():
     global yellowCoords
 
     pipeline = CueBallFinder()
-<<<<<<< HEAD
+
     yellowBall = YellowFinder()
     redBall = RedFinder()
     cornerDistance = CornerDistance()
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(1)
     leftCorner =[]
 
     while cap.isOpened():
-=======
-
-    cornerDistance = cornerDistance()
-    cap = cv2.VideoCapture('aviPool2.avi')
-
-    while(cap.isOpened()):
->>>>>>> edc45dd91ae1115a454959ef3dbe6da41a680248
         ret, frame = cap.read()
         if(ret):
             corners = cornerDistance.process(frame)
-            print corners
+            print(corners)
             # cv2.imshow('frame', frame)
             cornerDist = math.sqrt(math.pow(corners[0][0]+ corners[1][0], 2)+math.pow(corners[0][1]+corners[1][1],2))
-<<<<<<< HEAD
             if corners[0][0]<corners[1][0]:
                 leftCorner = corners[0]
             else:
                 leftCorner = corners[1]
-
             break
-=======
-            if(corner[0][0]<corner[1][0]):
-                leftCorner = corner[0]
-            elif:
-                leftCorner = corner[1]
-            if(cv2.waitKey(1) & 0xFF == ord('q')):
-                break
->>>>>>> edc45dd91ae1115a454959ef3dbe6da41a680248
+
 
     while(cap.isOpened()):
         ret, frame = cap.read()
@@ -84,17 +68,12 @@ def main():
             threeBall = redBall.process(frame)
             cv2.imshow('frame',frame)
             #print (output)
-<<<<<<< HEAD
+
             cueCoords = [output[0]-leftCorner[0],output[1]-leftCorner[1]]
             yellowCoords = [oneBall[0]-leftCorner[0],oneBall[1]-leftCorner[1]]
             redCoords = [threeBall[0]-leftCorner[0],threeBall[1]-leftCorner[1]]
             # print (coordinates)
             if cv2.waitKey(1) & 0xFF == ord('q'):
-=======
-            coordinates = output
-            print(coordinates)
-            if(cv2.waitKey(1) & 0xFF == ord('q')):
->>>>>>> edc45dd91ae1115a454959ef3dbe6da41a680248
                 break
 
     cap.release()
