@@ -19,6 +19,10 @@ app = Flask(__name__)
 cueCoords = []
 redCoords = []
 yellowCoords = []
+brownCoords = []
+blueCoords = []
+greenCoords = []
+purpleCoords = []
 
 @app.route("/")
 def output():
@@ -34,7 +38,7 @@ def send():
     global greenCoords
     global purpleCoords
     #cue, yellow, red, brown, blue, green, purple
-    coordinates = [cueCoords, yellowCoords, redCoords, brownCoords]
+    coordinates = [cueCoords, yellowCoords, redCoords, brownCoords, blueCoords, greenCoords, purpleCoords]
     print(coordinates)
     values = json.dumps(coordinates)
     print(values)
@@ -100,11 +104,11 @@ def main():
             if(len(sevenBall) != 0):
                 brownCoords = [sevenBall[0]-leftCorner[0],sevenBall[1]-leftCorner[1]]
             if(len(twoBall) != 0):
-                brownCoords = [twoBall[0]-leftCorner[0],twoBall[1]-leftCorner[1]]
+                blueCoords = [twoBall[0]-leftCorner[0],twoBall[1]-leftCorner[1]]
             if(len(sixBall) != 0):
-                brownCoords = [sixBall[0]-leftCorner[0],sixBall[1]-leftCorner[1]]
+                greenCoords = [sixBall[0]-leftCorner[0],sixBall[1]-leftCorner[1]]
             if(len(fourBall) != 0):
-                brownCoords = [fourBall[0]-leftCorner[0],fourBall[1]-leftCorner[1]]
+                purpleCoords = [fourBall[0]-leftCorner[0],fourBall[1]-leftCorner[1]]
 
             #print (cueCoords)
             if cv2.waitKey(1) & 0xFF == ord('q'):

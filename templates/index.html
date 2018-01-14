@@ -248,10 +248,10 @@ class Ball{
     this.k += 1;
 
     for(var i = 0; i<this.trailLen; i++){
-      strokeWeight(trailSize);
-      stroke('black')
-      point(this.trailX[i], this.trailY[i]);
-      //ellipse(this.trailX[i], this.trailY[i], trailSize);
+      // strokeWeight(trailSize);
+      // stroke('black')
+      // point(this.trailX[i], this.trailY[i]);
+      ellipse(this.trailX[i], this.trailY[i], trailSize);
     }
   }
 
